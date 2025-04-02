@@ -11,37 +11,37 @@ import { ArrowUpRightIcon } from "lucide-react";
 const featureItems = [
   {
     icon: "/vector-15.svg",
-    title: "Cross-Chain Access",
-    description: "Seamlessly interact with diverse blockchain networks.",
+    title: "Tamper-Proof Certificates",
+    description: "Immutable & Verifiable on the Blockchain.",
   },
   {
     icon: "/vector-2.svg",
-    title: "Decentralized Identity",
+    title: "Decentralized & Secure",
     description:
-      "Securely manage your digital identity across applications.",
+      "Trustless System with Full Transparency.",
   },
   {
     icon: "/vector-6.svg",
-    title: "Smart Contract Automation",
-    description: "Streamline operations with automated smart contracts.",
+    title: "Instant Verification",
+    description: "No Middlemen, No Delays.",
   },
   {
     icon: "/vector-10.svg",
-    title: "Community Governance",
+    title: "Cross-Platform Verification",
     description:
-      "Participate in decentralized decision-making through voting.",
+      "Verify certificates from any device with an internet connection.",
   },
   {
     icon: "/vector-16.svg",
-    title: "Asset Tokenization",
+    title: "Open API Integration",
     description:
-      "Digitally tokenize real-world assets for efficient management.",
+      "Allow institutions and employers to integrate with our system.",
   },
   {
     icon: "/vector-8.svg",
-    title: "Interoperable Data Exchange",
+    title: "Scalable Infrastructure",
     description:
-      "Exchange data seamlessly between applications for collaboration.",
+      "Handle thousands of certificates without performance loss.",
   },
 ];
 
@@ -125,31 +125,41 @@ export const MainContentSection = () => {
       {/* Hero Section */}
       <div className="flex flex-col items-center gap-12 w-full max-w-7xl px-4">
         <div className="flex flex-col items-center gap-6 text-center">
-          <h1 className="font-black text-[#07070a] text-5xl md:text-[85.3px] leading-tight [font-family:'Blanc_Groove-Black',Helvetica]">
-            Build the Future
+          <h2 className="font-black text-[#07070a] text-5xl md:text-[85.3px] leading-tight [font-family:'Blanc_Groove-Black',Helvetica]">
+            Empowering Trust
             <br />
-            with Web
-          </h1>
+            with Blockchain-Powered Certification
+          </h2>
           <p className="text-[#212333] text-lg md:text-xl [font-family:'Manrope',Helvetica] font-normal leading-relaxed max-w-2xl">
-            Discover how we can help you connect with the next generation of
-            the internet.
+            Issue, Verify, and Revoke Certificates with Complete Security & Transparency
           </p>
         </div>
-        <div className="flex items-center gap-4">
-          <Button className="bg-[#96e963] text-[#1e2f14] hover:bg-[#85d855]">
-            Sign up
+        <div className="flex items-center gap-10">
+          <Button className="bg-[#96e963] text-[#000000] hover:bg-[#85d855]">
+          Issue Certificate
             <img
               className="ml-2 w-[5.25px] h-[9.63px]"
               alt="Vector"
               src="/vector-9.svg"
             />
           </Button>
-          <Button
-            variant="outline"
-            className="text-[#07070a] border-[#00000080]"
-          >
-            Contact sales
+          <Button className="bg-[#96e963] text-[#000000] hover:bg-[#85d855]">
+          Verify Certificate
+            <img
+              className="ml-2 w-[5.25px] h-[9.63px]"
+              alt="Vector"
+              src="/vector-9.svg"
+            />
           </Button>
+          <Button className="bg-[#96e963] text-[#000000] hover:bg-[#85d855]">
+          Revoke Certificate
+            <img
+              className="ml-2 w-[5.25px] h-[9.63px]"
+              alt="Vector"
+              src="/vector-9.svg"
+            />
+          </Button>
+ 
         </div>
       </div>
 
