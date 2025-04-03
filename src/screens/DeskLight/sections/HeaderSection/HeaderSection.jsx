@@ -1,22 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../../../../components/ui/button";
+import { useWallet } from "../../../../WalletProvider";
 
 export const HeaderSection = () => {
-  const [account, setAccount] = useState(null);
-
-  const connectMetaMask = async () => {
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-        setAccount(accounts[0]);
-      } catch (error) {
-        console.error("MetaMask connection failed", error);
-      }
-    } else {
-      alert("MetaMask is not installed. Please install it to use this feature.");
-    }
-  };
+  const { account, connectMetaMask } = useWallet();
 
   return (
     <header className="flex w-full h-[71px] items-center justify-between px-[166px] py-0 bg-white border-b border-[#a6a7ad]">
