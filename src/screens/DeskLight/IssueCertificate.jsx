@@ -16,7 +16,7 @@ const IssueCertificate = () => {
   useEffect(() => {
     const verifyIssuer = async () => {
       if (account) {
-        const result = checkIssuer(account);
+        const result = await checkIssuer(account);
         setIsIssuer(result);
       }
     };
@@ -35,6 +35,7 @@ const IssueCertificate = () => {
       const hash = await issueCertificate(recipientName, recipientWallet, certificateTitle, expiryTimestamp);
       setCertHash(hash);
     } catch (error) {
+      alert("You are not authorized to issue certificates!");
       console.error("Certificate issuance failed:", error);
     }
   };
