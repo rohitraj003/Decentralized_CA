@@ -11,7 +11,7 @@ const IssueCertificate = () => {
   const [certificateTitle, setCertificateTitle] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [isIssuer, setIsIssuer] = useState(false);
-  const [certHash, setCertHash] = useState("");
+  const [certDetails, setCertDetails] = useState(null);
 
   useEffect(() => {
     const verifyIssuer = async () => {
@@ -32,16 +32,21 @@ const IssueCertificate = () => {
       }
 
       const expiryTimestamp = Math.floor(new Date(expiryDate).getTime() / 1000);
-      const hash = await issueCertificate(recipientName, recipientWallet, certificateTitle, expiryTimestamp);
-      setCertHash(hash);
+      const { certHash, ipfsHash } = await issueCertificate(
+        recipientName,
+        recipientWallet,
+        certificateTitle,
+        expiryTimestamp
+      );
+      setCertDetails({ certHash, ipfsHash });
     } catch (error) {
-      alert("You are not authorized to issue certificates!");
+      alert("Certificate issuance failed!");
       console.error("Certificate issuance failed:", error);
     }
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(certHash).then(() => {
+    navigator.clipboard.writeText(certDetails?.certHash).then(() => {
       alert("Certificate Hash copied to clipboard!");
     });
   };
@@ -49,6 +54,7 @@ const IssueCertificate = () => {
   return (
     <div className="flex flex-col items-center min-h-screen w-full px-4 mt-16">
       <h1 className="text-3xl font-bold text-center">Issue Certificate</h1>
+
       {isIssuer ? (
         <form className="flex flex-col gap-4 w-full max-w-lg mt-6" onSubmit={handleIssueCertificate}>
           <Input
@@ -85,12 +91,26 @@ const IssueCertificate = () => {
       ) : (
         <p className="text-red-500 mt-4">You are not an authorized issuer.</p>
       )}
-      {certHash && (
-        <div className="mt-4 text-center flex flex-col items-center gap-2">
-          <p>Certificate Hash: <strong>{certHash}</strong></p>
+
+      {certDetails && (
+        <div className="mt-6 text-center flex flex-col items-center gap-2">
+          <p>
+            <strong>Certificate Hash:</strong> {certDetails.certHash}
+          </p>
           <Button onClick={handleCopy} className="bg-blue-500 text-white px-4 py-2 rounded">
-            Copy to Clipboard
+            Copy Certificate Hash
           </Button>
+          <p>
+            <strong>View on IPFS:</strong>{" "}
+            <a
+              href={`https://${certDetails.ipfsHash}.ipfs.dweb.link`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline"
+            >
+              Open Certificate
+            </a>
+          </p>
         </div>
       )}
     </div>

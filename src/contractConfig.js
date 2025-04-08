@@ -1,6 +1,19 @@
-export const CONTRACT_ADDRESS = "0x6ee09a1bac3c0E9EA8E7aF762bb1eECd174FC368";
+export const CONTRACT_ADDRESS = "0x6b4d9D3991464Fce6046d95e5Cbab4ae3BA5d345";
 
 export const CONTRACT_ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "issuer",
+				"type": "address"
+			}
+		],
+		"name": "addIssuer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -32,6 +45,18 @@ export const CONTRACT_ABI = [
 				"internalType": "address",
 				"name": "issuedBy",
 				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "ipfsHash",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "signature",
+				"type": "string"
 			}
 		],
 		"name": "CertificateIssued",
@@ -49,6 +74,50 @@ export const CONTRACT_ABI = [
 		],
 		"name": "CertificateRevoked",
 		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_recipientName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_recipientWallet",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_certificateTitle",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_ipfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_signature",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_expiryDate",
+				"type": "uint256"
+			}
+		],
+		"name": "issueCertificate",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -84,7 +153,20 @@ export const CONTRACT_ABI = [
 				"type": "address"
 			}
 		],
-		"name": "addIssuer",
+		"name": "removeIssuer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "certHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "revokeCertificate",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -162,6 +244,16 @@ export const CONTRACT_ABI = [
 				"type": "uint256"
 			},
 			{
+				"internalType": "string",
+				"name": "ipfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "signature",
+				"type": "string"
+			},
+			{
 				"internalType": "bool",
 				"name": "isValid",
 				"type": "bool"
@@ -211,66 +303,6 @@ export const CONTRACT_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "_recipientName",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_recipientWallet",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_certificateTitle",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_expiryDate",
-				"type": "uint256"
-			}
-		],
-		"name": "issueCertificate",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "issuer",
-				"type": "address"
-			}
-		],
-		"name": "removeIssuer",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "certHash",
-				"type": "bytes32"
-			}
-		],
-		"name": "revokeCertificate",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "bytes32",
 				"name": "certHash",
 				"type": "bytes32"
@@ -302,6 +334,16 @@ export const CONTRACT_ABI = [
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
 			},
 			{
 				"internalType": "bool",

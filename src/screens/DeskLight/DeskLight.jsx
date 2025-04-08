@@ -7,6 +7,7 @@ import AddOrganization from "./AddOrganization";
 import IssueCertificate from "./IssueCertificate";
 import VerifyCertificate from "./VerifyCertificate";
 import RevokeCertificate from "./RevokeCertificate";
+import SetupIPFS from "./SetupIPFS";
 
 const DeskLight = () => {
   return (
@@ -37,6 +38,7 @@ const DeskLight = () => {
             <Route path="/issue-certificate" element={<IssueCertificate />} />
             <Route path="/verify-certificate" element={<VerifyCertificate />} />
             <Route path="/revoke-certificate" element={<RevokeCertificate />} />
+            <Route path="/setup-ipfs" element={<SetupIPFS />} />
           </Routes>
 
           {/* Footer 

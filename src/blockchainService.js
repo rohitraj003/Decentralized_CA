@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from "./contractConfig";
+import { uploadCertificateToIPFS } from "./ipfsService"; 
 
 // Function to connect to the smart contract
 export const getContract = async (providerOrSigner) => {
@@ -40,28 +41,58 @@ export const issueCertificate = async (recipientName, recipientWallet, certifica
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
     const contract = await getContract(signer);
-
     const sender = await signer.getAddress();
-    const isIssuer = await contract.isAuthorizedIssuer(sender); // using the helper again
+    const isIssuer = await contract.isAuthorizedIssuer(sender);
+
     if (!isIssuer) {
       throw new Error("You are not an authorized issuer!");
     }
 
-    const tx = await contract.issueCertificate(
+    // Upload metadata to IPFS
+    const ipfsHash = await uploadCertificateToIPFS({
       recipientName,
       recipientWallet,
       certificateTitle,
+      issuedBy: sender,
+      issueDate: Math.floor(Date.now() / 1000),
+      expiryDate,
+    });
+
+    // Call smart contract
+    const tx = await contract.issueCertificate(
+      recipientName.trim(),
+      recipientWallet.trim(),
+      certificateTitle.trim(),
+      ipfsHash,
+      "dummy-signature",
       expiryDate
     );
-    await tx.wait();
 
-    console.log("Transaction Hash (Certificate Hash):", tx.hash);
-    return tx.hash;
+    const receipt = await tx.wait();
+
+    // Extract certificate hash from event logs
+    const event = receipt.logs
+      .map((log) => {
+        try {
+          return contract.interface.parseLog(log);
+        } catch {
+          return null;
+        }
+      })
+      .find((e) => e && e.name === "CertificateIssued");
+
+    const certHash = event?.args?.[0];
+
+    console.log("Certificate issued! Hash:", certHash);
+    console.log("IPFS Hash:", ipfsHash);
+
+    return { certHash, ipfsHash };
   } catch (error) {
     console.error("Error issuing certificate:", error);
     throw error;
   }
 };
+
 
 export const addIssuer = async (orgAddress) => {
   try {
