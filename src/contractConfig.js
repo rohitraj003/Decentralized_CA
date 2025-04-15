@@ -1,10 +1,36 @@
-export const CONTRACT_ADDRESS = "0x3cC0A47869A2F22B9758924c18bD24A145109C37";
+export const CONTRACT_ADDRESS = "0x73215517b1cF48fb714d24267210058b73380542";
 
 export const CONTRACT_ABI = [
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newAdmin",
+				"type": "address"
+			}
+		],
+		"name": "AdminAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "proposedAdmin",
+				"type": "address"
+			}
+		],
+		"name": "AdminProposed",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -67,6 +93,25 @@ export const CONTRACT_ABI = [
 		"inputs": [
 			{
 				"indexed": true,
+				"internalType": "bytes32",
+				"name": "certHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "voteCount",
+				"type": "uint256"
+			}
+		],
+		"name": "CertificateVerified",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
 				"internalType": "address",
 				"name": "issuer",
 				"type": "address"
@@ -89,6 +134,32 @@ export const CONTRACT_ABI = [
 		"type": "event"
 	},
 	{
+		"inputs": [],
+		"name": "VERIFICATION_THRESHOLD",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newAdmin",
+				"type": "address"
+			}
+		],
+		"name": "addAdmin",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -102,8 +173,14 @@ export const CONTRACT_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "admin",
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "adminList",
 		"outputs": [
 			{
 				"internalType": "address",
@@ -122,7 +199,50 @@ export const CONTRACT_ABI = [
 				"type": "address"
 			}
 		],
+		"name": "admins",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
 		"name": "authorizedIssuers",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "certificateVerifications",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -186,6 +306,11 @@ export const CONTRACT_ABI = [
 			{
 				"internalType": "bool",
 				"name": "isValid",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "verified",
 				"type": "bool"
 			}
 		],
@@ -304,6 +429,25 @@ export const CONTRACT_ABI = [
 		"inputs": [
 			{
 				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"name": "verificationVotes",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
 				"name": "certHash",
 				"type": "bytes32"
 			}
@@ -349,9 +493,27 @@ export const CONTRACT_ABI = [
 				"internalType": "bool",
 				"name": "",
 				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "certHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "verifyCertificateByAdmin",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ];

@@ -109,3 +109,31 @@ export const addIssuer = async (orgAddress) => {
   }
 };
 
+export const verifyCertificateDetails = async (certHash) => {
+  const provider = new ethers.BrowserProvider(window.ethereum);
+  const contract = await getContract(provider);
+
+  const details = await contract.verifyCertificate(certHash);
+  return {
+    recipientName: details[0],
+    recipientWallet: details[1],
+    certificateTitle: details[2],
+    issueDate: Number(details[3]),
+    expiryDate: Number(details[4]),
+    ipfsHash: details[5],
+    signature: details[6],
+    isValid: details[7],
+    isVerified: details[8],
+  };
+};
+
+export const voteToVerifyCertificate = async (certHash) => {
+  const provider = new ethers.BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
+  const contract = await getContract(signer);
+
+  const tx = await contract.verifyCertificateByAdmin(certHash);
+  await tx.wait();
+};
+
+
