@@ -2,7 +2,8 @@
 pragma solidity ^0.8.19;
 
 contract DecentralizedCA {
-    address public admin;
+    mapping(address => bool) public admins;
+    address[] public adminList;
 
     struct Certificate {
         string recipientName;
@@ -12,12 +13,19 @@ contract DecentralizedCA {
         uint256 issueDate;
         uint256 expiryDate;
         string ipfsHash;
-        string signature; 
+        string signature;
         bool isValid;
+        bool verified; 
     }
 
     mapping(bytes32 => Certificate) public certificates;
     mapping(address => bool) public authorizedIssuers;
+
+    mapping(bytes32 => mapping(address => bool)) public certificateVerifications;
+    // Counts the total votes for certificate verification.
+    mapping(bytes32 => uint256) public verificationVotes;
+    // threshold (require at least 2 votes)
+    uint256 public constant VERIFICATION_THRESHOLD = 2;
 
     event CertificateIssued(
         bytes32 indexed certHash,
@@ -25,15 +33,19 @@ contract DecentralizedCA {
         string certificateTitle,
         address issuedBy,
         string ipfsHash,
-        string signature 
+        string signature
     );
 
     event CertificateRevoked(bytes32 indexed certHash);
     event IssuerAdded(address indexed issuer);
     event IssuerRemoved(address indexed issuer);
 
+    event CertificateVerified(bytes32 indexed certHash, uint256 voteCount);
+    event AdminProposed(address indexed proposedAdmin);
+    event AdminAdded(address indexed newAdmin);
+
     modifier onlyAdmin() {
-        require(msg.sender == admin, "Only admin can perform this action");
+        require(admins[msg.sender], "Only admin can perform this action");
         _;
     }
 
@@ -43,7 +55,12 @@ contract DecentralizedCA {
     }
 
     constructor() {
-        admin = msg.sender;
+        // Initialize the deployer as the first admin.
+        admins[msg.sender] = true;
+        adminList.push(msg.sender);
+        // also mark the deployer as an authorized issuer if desired.
+        authorizedIssuers[msg.sender] = true;
+        emit IssuerAdded(msg.sender);
     }
 
     function isAuthorizedIssuer(address user) external view returns (bool) {
@@ -51,12 +68,19 @@ contract DecentralizedCA {
     }
 
     function isAdmin(address user) external view returns (bool) {
-        return user == admin;
+        return admins[user];
     }
 
     function addIssuer(address issuer) external onlyAdmin {
         authorizedIssuers[issuer] = true;
         emit IssuerAdded(issuer);
+    }
+
+    function addAdmin(address newAdmin) external onlyAdmin {
+        require(!admins[newAdmin], "Already an admin");
+        admins[newAdmin] = true;
+        adminList.push(newAdmin);
+        emit AdminAdded(newAdmin);
     }
 
     function removeIssuer(address issuer) external onlyAdmin {
@@ -85,13 +109,38 @@ contract DecentralizedCA {
             expiryDate: _expiryDate,
             ipfsHash: _ipfsHash,
             signature: _signature,
-            isValid: true
+            isValid: true,
+            verified: false  // Initially, not verified
         });
 
         emit CertificateIssued(certHash, _recipientName, _certificateTitle, msg.sender, _ipfsHash, _signature);
         return certHash;
     }
 
+    // Function to revoke a certificate (only admin)
+    function revokeCertificate(bytes32 certHash) external onlyAdmin {
+        require(certificates[certHash].isValid, "Certificate is already revoked or doesn't exist");
+        certificates[certHash].isValid = false;
+        emit CertificateRevoked(certHash);
+    }
+
+    // Function for admins to vote to verify a certificate.
+    function verifyCertificateByAdmin(bytes32 certHash) external onlyAdmin {
+        // Ensure the certificate exists
+        require(certificates[certHash].issueDate > 0, "Certificate not found");
+        // Admin cannot vote twice for the same certificate.
+        require(!certificateVerifications[certHash][msg.sender], "Admin already voted");
+        certificateVerifications[certHash][msg.sender] = true;
+        verificationVotes[certHash] += 1;
+
+        // If the threshold is reached, mark certificate as verified.
+        if (verificationVotes[certHash] >= VERIFICATION_THRESHOLD) {
+            certificates[certHash].verified = true;
+            emit CertificateVerified(certHash, verificationVotes[certHash]);
+        }
+    }
+
+    // The verifyCertificate function returns all details, including whether it's verified.
     function verifyCertificate(bytes32 certHash)
         external
         view
@@ -103,6 +152,7 @@ contract DecentralizedCA {
             uint256,
             string memory,
             string memory,
+            bool,
             bool
         )
     {
@@ -116,13 +166,8 @@ contract DecentralizedCA {
             cert.expiryDate,
             cert.ipfsHash,
             cert.signature,
-            cert.isValid
+            cert.isValid,
+            cert.verified 
         );
-    }
-
-    function revokeCertificate(bytes32 certHash) external onlyAdmin {
-        require(certificates[certHash].isValid, "Certificate is already revoked or doesn't exist");
-        certificates[certHash].isValid = false;
-        emit CertificateRevoked(certHash);
     }
 }
