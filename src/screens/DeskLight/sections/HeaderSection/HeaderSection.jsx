@@ -14,6 +14,7 @@ export const HeaderSection = () => {
       <nav className="flex gap-6">
         <Link to="/" className="text-black hover:underline">Home</Link>
         <Link to="/add-organization" className="text-black hover:underline">Add Issuer</Link>
+        <Link to="/" className="text-black hover:underline">Admins</Link>
       </nav>
 
       <Button onClick={connectMetaMask} className="bg-[#96e963] text-[#000000]">
