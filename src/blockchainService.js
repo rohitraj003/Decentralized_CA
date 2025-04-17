@@ -136,4 +136,21 @@ export const voteToVerifyCertificate = async (certHash) => {
   await tx.wait();
 };
 
+export const revokeCertificateOnChain = async (certHash) => {
+  try {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const contract = await getContract(signer);
+
+    const tx = await contract.revokeCertificate(certHash);
+    await tx.wait();
+
+    console.log(`Certificate ${certHash} revoked successfully.`);
+    return true;
+  } catch (error) {
+    console.error("Error revoking certificate:", error);
+    throw error;
+  }
+};
+
 

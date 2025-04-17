@@ -13,7 +13,7 @@ export const HeaderSection = () => {
       {/* Navbar with Home and Add Organizer */}
       <nav className="flex gap-6">
         <Link to="/" className="text-black hover:underline">Home</Link>
-        <Link to="/add-organization" className="text-black hover:underline">Add Organizer</Link>
+        <Link to="/add-organization" className="text-black hover:underline">Add Issuer</Link>
       </nav>
 
       <Button onClick={connectMetaMask} className="bg-[#96e963] text-[#000000]">

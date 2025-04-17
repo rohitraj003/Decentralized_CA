@@ -124,7 +124,7 @@ export const MainContentSection = () => {
       </div>
 
       {/* Trusted By Section */}
-      <div className="flex flex-col items-center gap-9 w-full">
+      {/*<div className="flex flex-col items-center gap-9 w-full">
         <h3 className="font-bold text-[#0d0e14] text-lg text-center [font-family:'Manrope',Helvetica]">
           Trusted by the world leaders
         </h3>

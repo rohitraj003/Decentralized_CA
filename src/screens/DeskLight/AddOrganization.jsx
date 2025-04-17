@@ -40,7 +40,7 @@ const AddOrganization = () => {
 
   return (
     <div className="flex flex-col items-center min-h-screen w-full px-4 mt-16">
-      <h1 className="text-3xl font-bold text-center">Add New Organizer</h1>
+      <h1 className="text-3xl font-bold text-center">Add New Organization</h1>
       {isAdmin ? (
         <form className="flex flex-col gap-4 w-full max-w-lg mt-6" onSubmit={handleSubmit}>
           <Input
@@ -68,7 +68,7 @@ const AddOrganization = () => {
           </Button>
         </form>
       ) : (
-        <p className="text-red-500 mt-6">Only admin can add organizers.</p>
+        <p className="text-red-500 mt-6">Only admin can add organizations.</p>
       )}
     </div>
   );
